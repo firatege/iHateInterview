@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VSCode settings
+.vscode/
+*.code-workspace
+
+# Environment files
+.env
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model and data files
+*.joblib
+*.h5
+*.pkl
+*.ckpt
+*.tflite
+*.onnx
+*.pb
+*.task
+*.pt
+*.pth
+*.npy
+*.npz
+*.csv
+*.xlsx
+
+# Logs and outputs
+*.log
+*.out
+
+# Test and coverage
+htmlcov/
+.tox/
+.coverage
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Notebooks outputs
+*.nbconvert.ipynb
+
+# IDEs
+.idea/
+*.iml
+
+# Misc
+*.bak
+*.swp

@@ -1,0 +1,20 @@
+# Temel kütüphaneler
+opencv-python
+mediapipe
+numpy
+pandas
+scikit-learn
+joblib
+
+# Görselleştirme
+matplotlib
+seaborn
+plotly
+
+# Gelişmiş özellikler (sonraki aşamalar için)
+tensorflow
+numba
+
+# Geliştirme araçları
+jupyter
+pytest
