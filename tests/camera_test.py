@@ -3,7 +3,7 @@ import mediapipe as mp
 
 # Test kodu
 cap = cv2.VideoCapture(0)
-mp_face_mesh = mp.solutions.face_mesh
+mp_face_mesh = mp.solutions.face_mesh # type: ignore
 face_mesh = mp_face_mesh.FaceMesh()
 
 

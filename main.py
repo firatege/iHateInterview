@@ -16,25 +16,17 @@ from src.utils import config
 from src.core.feature_extractor import FeatureExtractor
 from src.emotion.emotion_classifier import EmotionClassifier
 from src.emotion.emotion_utils import EMOTION_LABELS, EMOTION_COLORS
-
+import warnings
+warnings.filterwarnings("ignore")
 # Config ve model yükle
 settings = config.Config()
 feature_extractor = FeatureExtractor()
 classifier = EmotionClassifier(model_path=settings.MODEL_PATH, valid_labels=EMOTION_LABELS)
 
-# FaceLandmarker modelini yükle
-MODEL_PATH = settings.FACE_LANDMARKER_PATH
-base_options = python.BaseOptions(model_asset_path=MODEL_PATH)
-options = vision.FaceLandmarkerOptions(
-    base_options=base_options,
-    output_face_blendshapes=True,
-    output_facial_transformation_matrixes=True,
-    num_faces=1
-)
-detector = vision.FaceLandmarker.create_from_options(options)
 
-# Kamera başlat
-cap = cv2.VideoCapture(settings.CAMERA_INDEX)
+# FaceLandmarker ve kamera modüler config içinden yükleniyor
+detector = config.FaceLandmarkerLoader.load(settings.FACE_LANDMARKER_PATH, num_faces=1)
+cap = config.CameraLoader.open(settings.CAMERA_INDEX)
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -52,6 +44,13 @@ while cap.isOpened():
         emotion = classifier.predict(features)[0]
         color = EMOTION_COLORS.get(emotion, (255,255,255))
         cv2.putText(frame, f"Emotion: {emotion}", (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 1.2, color, 3)
+
+        # En yüksek 5 blendshape'i ekrana yazdır
+        top_blendshapes = sorted(blend_dict.items(), key=lambda x: x[1], reverse=True)[:5]
+        for idx, (name, score) in enumerate(top_blendshapes):
+            text = f"{name}: {score:.2f}"
+            cv2.putText(frame, text, (30, 100 + idx * 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 200, 255), 2)
+
         # Landmarkları çiz (isteğe bağlı)
         if result.face_landmarks:
             for landmarks in result.face_landmarks:

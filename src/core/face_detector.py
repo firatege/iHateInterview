@@ -9,7 +9,7 @@ class FaceDetector:
     """Main class for face detection using MediaPipe."""
     def __init__(self, camera_index):
         self.cap = video_processor.CameraManager(camera_index)
-        self.mp_face_mesh = mp.solutions.face_mesh
+        self.mp_face_mesh = mp.solutions.face_mesh # type: ignore
         self.face_mesh = self.mp_face_mesh.FaceMesh()
 
     def get_frame(self):

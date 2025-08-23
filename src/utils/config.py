@@ -1,10 +1,34 @@
+# MediaPipe FaceLandmarker ve kamera için modüler sınıflar
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+import cv2
+
+class FaceLandmarkerLoader:
+    @staticmethod
+    def load(model_path, num_faces=1):
+        base_options = python.BaseOptions(model_asset_path=model_path)
+        options = vision.FaceLandmarkerOptions(
+            base_options=base_options,
+            output_face_blendshapes=True,
+            output_facial_transformation_matrixes=True,
+            num_faces=num_faces
+        )
+        return vision.FaceLandmarker.create_from_options(options)
+
+class CameraLoader:
+    @staticmethod
+    def open(index=0):
+        return cv2.VideoCapture(index)
 import os
 
 class Config:
     # Model Paths
     FACE_LANDMARKER_PATH = os.getenv('FACE_LANDMARKER_PATH', 'models/face_landmarker.task')
     MODEL_PATH = os.getenv('MODEL_PATH', 'models/emotion_rf_model.joblib')
-
+    BLENDSHAPE_SAVE_PATH = "data/blendshapes_only.csv"
+    GEOM_SAVE_PATH = "data/distances_angles_only.csv"
+    #Other Paths
+    TRAIN_DATA_SAVE_PATH = "data/blendshapes_dataset.csv"
     # Camera Settings
     CAMERA_WIDTH = int(os.getenv('CAMERA_WIDTH', 1280))
     CAMERA_HEIGHT = int(os.getenv('CAMERA_HEIGHT', 720))
