@@ -1,4 +1,4 @@
-# 😎 iHateInterview: Real-Time Emotion Detector
+#  iHateInterview: Real-Time Emotion Detector
 
 Welcome to the project where your face tells all! (And your code does the rest.)
 
@@ -20,17 +20,6 @@ A Python app that:
    ```
 5. Make faces. See what the machine thinks. Try not to laugh (or do, it's good for the data).
 
-## Project Structure
-```
-├── main.py                  # The magic happens here
-├── src/
-│   ├── core/                # Face detection, feature extraction, base classifier
-│   ├── emotion/             # Emotion classifier, utils
-│   └── utils/               # Config, video processing
-├── data/                    # Your precious CSVs
-├── models/                  # Trained models live here
-└── requirements.txt         # Don't forget this one
-```
 
 ## FAQ
 - **Q:** Why is it called iHateInterview?
@@ -42,8 +31,7 @@ A Python app that:
 - **Q:** Can it detect if I'm lying?
 - **A:** No, but it can tell if you're frowning about it.
 
-## Contributing
-PRs welcome! Bonus points for adding new emotions (or memes).
+
 
 ## License
 MIT. Use it, break it, improve it, just don't blame us if your computer thinks you're always angry.
