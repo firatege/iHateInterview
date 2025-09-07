@@ -1,16 +1,12 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, classification_report
 
-# Constants
-EMOTION_LABELS = ["Happy", "Sad", "Angry", "Fear", "Disgust", "Surprise", "Neutral"]
+# Constants (reduced set used in this project)
+EMOTION_LABELS = ["Engaged", "Disengaged", "Neutral"]
 EMOTION_COLORS = {
-    "Happy": (255, 215, 0),
-    "Sad": (70, 130, 180),
-    "Angry": (220, 20, 60),
-    "Fear": (138, 43, 226),
-    "Disgust": (34, 139, 34),
-    "Surprise": (255, 140, 0),
-    "Neutral": (128, 128, 128)
+    "Engaged": (0, 255, 0),      # green
+    "Disengaged": (0, 0, 255),   # red
+    "Neutral": (255, 165, 0)     # orange
 }
 
 # Utility functions

@@ -1,0 +1,13 @@
+best_model: random_forest
+cv_score: 0.8912
+test_accuracy: 0.8739
+
+              precision    recall  f1-score   support
+
+  Disengaged       0.86      0.84      0.85        37
+     Engaged       0.90      0.97      0.94        37
+     Neutral       0.86      0.81      0.83        37
+
+    accuracy                           0.87       111
+   macro avg       0.87      0.87      0.87       111
+weighted avg       0.87      0.87      0.87       111

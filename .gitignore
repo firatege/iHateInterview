@@ -70,3 +70,10 @@ dist/
 # Misc
 *.bak
 *.swp
+
+# model
+model/
+# data
+data/
+#notebook
+notebooks/
