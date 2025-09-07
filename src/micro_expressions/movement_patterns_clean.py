@@ -290,7 +290,13 @@ class MovementPatternDetector:
             ('Interest', self.detect_interest),
             ('Fatigue', self.detect_fatigue),
             ('Alertness', self.detect_alertness),
-            ('Discomfort', self.detect_discomfort)
+            ('Discomfort', self.detect_discomfort),
+            # Yeni eklenen ilgi göstergeleri
+            ('Smile', self.detect_smile),
+            ('Excitement', self.detect_excitement),
+            ('Agreement', self.detect_agreement),
+            ('Appreciation', self.detect_appreciation),
+            ('Curiosity', self.detect_curiosity)
         ]
         
         for pattern_name, detection_func in patterns_to_check:
@@ -817,5 +823,140 @@ class MovementPatternDetector:
                 
         except Exception as e:
             print(f"Discomfort detection error: {e}")
+        return None
+
+    def detect_smile(self, buffer):
+        """Gülümseme - İlgi, memnuniyet, mutluluk"""
+        try:
+            if len(buffer) < 5:
+                return None
+            
+            smile_blendshapes = ['mouthSmileLeft', 'mouthSmileRight']
+            values = buffer.get_blendshape_series(smile_blendshapes)
+            
+            if len(values) < 3:
+                return None
+            
+            recent_values = values[-8:]
+            avg_values = np.mean(recent_values, axis=0)
+            max_smile = np.max(avg_values)
+            
+            if max_smile > 0.4:  # Belirgin gülümseme
+                return 'Smile_Happy'
+                
+        except Exception as e:
+            print(f"Smile detection error: {e}")
+        return None
+    
+    def detect_excitement(self, buffer):
+        """Heyecan - Genişleyen gözler + hafif ağız açma kombinasyonu"""
+        try:
+            if len(buffer) < 8:
+                return None
+            
+            excitement_blendshapes = ['eyeWideLeft', 'eyeWideRight', 'jawOpen', 'browInnerUp']
+            values = buffer.get_blendshape_series(excitement_blendshapes)
+            
+            if len(values) < 4:
+                return None
+            
+            recent_values = values[-10:]
+            avg_values = np.mean(recent_values, axis=0)
+            
+            eye_wide = np.mean(avg_values[:2])
+            jaw_open = avg_values[2] if len(avg_values) > 2 else 0
+            brow_up = avg_values[3] if len(avg_values) > 3 else 0
+            
+            # Heyecan genellikle hafif ağız açma ve göz genişletme ile gösterilir
+            if eye_wide > 0.3 and jaw_open > 0.15 and brow_up > 0.2:
+                return 'Excitement_Enthusiastic'
+                
+        except Exception as e:
+            print(f"Excitement detection error: {e}")
+        return None
+    
+    def detect_agreement(self, buffer):
+        """Onaylama/Katılma - Hafif kafa sallama, kaş kaldırma"""
+        try:
+            if len(buffer) < 10:
+                return None
+            
+            # Onay genellikle kaş kaldırma ile gösterilir
+            agreement_blendshapes = ['browOuterUpLeft', 'browOuterUpRight', 'browInnerUp']
+            values = buffer.get_blendshape_series(agreement_blendshapes)
+            
+            if len(values) < 3:
+                return None
+            
+            recent_values = values[-12:]
+            avg_values = np.mean(recent_values, axis=0)
+            
+            brow_outer = np.mean(avg_values[:2])
+            brow_inner = avg_values[2] if len(avg_values) > 2 else 0
+            
+            # Kaş kaldırma kombinasyonu
+            if brow_outer > 0.3 and brow_inner > 0.25:
+                return 'Agreement_Approving'
+                
+        except Exception as e:
+            print(f"Agreement detection error: {e}")
+        return None
+    
+    def detect_appreciation(self, buffer):
+        """Takdir/Beğenme - Hafif gülümseme ve baş eğme"""
+        try:
+            if len(buffer) < 8:
+                return None
+            
+            appreciation_blendshapes = ['mouthSmileLeft', 'mouthSmileRight', 'browInnerUp']
+            values = buffer.get_blendshape_series(appreciation_blendshapes)
+            
+            if len(values) < 3:
+                return None
+            
+            recent_values = values[-10:]
+            avg_values = np.mean(recent_values, axis=0)
+            
+            smile = np.mean(avg_values[:2])
+            brow_inner = avg_values[2] if len(avg_values) > 2 else 0
+            
+            # Takdir genellikle hafif gülümseme ve iç kaş kaldırma ile gösterilir
+            if smile > 0.3 and brow_inner > 0.2:
+                return 'Appreciation_Impressed'
+                
+        except Exception as e:
+            print(f"Appreciation detection error: {e}")
+        return None
+    
+    def detect_curiosity(self, buffer):
+        """Merak - Tek kaş kaldırma, hafif öne eğilme"""
+        try:
+            if len(buffer) < 6:
+                return None
+            
+            curiosity_blendshapes = ['browOuterUpLeft', 'browOuterUpRight', 'eyeWideLeft', 'eyeWideRight']
+            values = buffer.get_blendshape_series(curiosity_blendshapes)
+            
+            if len(values) < 4:
+                return None
+            
+            recent_values = values[-8:]
+            avg_values = np.mean(recent_values, axis=0)
+            
+            # Asimetrik kaş kaldırma (merak işareti)
+            left_brow = avg_values[0]
+            right_brow = avg_values[1]
+            eye_wide = np.mean(avg_values[2:4])
+            
+            # Asimetri kontrolü
+            brow_asymmetry = abs(left_brow - right_brow)
+            brow_max = max(left_brow, right_brow)
+            
+            # Merak genellikle asimetrik kaş kaldırma ve göz genişletme ile gösterilir
+            if (brow_asymmetry > 0.15 and brow_max > 0.25) or (eye_wide > 0.3 and brow_max > 0.2):
+                return 'Curiosity_Interested'
+                
+        except Exception as e:
+            print(f"Curiosity detection error: {e}")
         return None
 
